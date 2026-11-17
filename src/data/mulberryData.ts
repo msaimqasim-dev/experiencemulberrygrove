@@ -10,11 +10,10 @@ export const CLIENT_SOURCE = {
 
 export const NAV_SECTIONS = [
   { label: 'Vision', id: 'vision' },
-  { label: 'Community', id: 'community' },
-  { label: 'Location', id: 'location' },
   { label: 'Residential', id: 'residential' },
+  { label: 'Community', id: 'community' },
   { label: 'Retail', id: 'retail' },
-  { label: 'Contact', id: 'contact' },
+  { label: 'Contact Us', id: 'contact' },
 ];
 
 export const MULBERRY_MEDIA = {
@@ -112,12 +111,16 @@ export interface OfferingShowcase {
 }
 
 const stoneMartinCommunity = 'https://www.stonemartinbuilders.com/find-my-home/harris-county/mulberry-grove';
-const greystoneLeasing = { status: 'Now Leasing', phone: '478-368-5350', tel: '4783685350' };
+const greystoneCommunity = 'https://greystoneproperties.net/mulberry-grove';
+const greystoneLeasing = { name: 'Greystone Leasing Office', status: 'Now Leasing', phone: '478-368-5350', tel: '4783685350' };
+const woodruffDescription = `Woodruff Real Estate Services owns the land at Mulberry Grove and handles land and lot sales. ${clientCopy.retail.paragraph}`;
+const stoneMartinDescription = `Stone Martin Builders is the partner responsible for building single-family homes at Mulberry Grove. ${clientCopy.stoneMartin.paragraph}`;
+const greystoneDescription = `Greystone Properties is responsible for the apartment phase and apartment property management at Mulberry Grove. ${clientCopy.greystone.paragraph}`;
 
 export const PROPERTY_OFFERINGS: OfferingShowcase[] = [
   {
     id: 'stone-martin-builders', chipPrimary: 'Single-Family Homes', chipSecondary: 'Stone Martin Builders',
-    title: clientCopy.stoneMartin.heading, description: clientCopy.stoneMartin.paragraph,
+    title: clientCopy.stoneMartin.heading, description: stoneMartinDescription,
     image: MULBERRY_MEDIA.residentialSingleFamily,
     alt: 'A bedside table and lamp in a warmly decorated bedroom',
     details: [
@@ -131,19 +134,19 @@ export const PROPERTY_OFFERINGS: OfferingShowcase[] = [
   },
   {
     id: 'greystone-properties', chipPrimary: 'Apartment Homes', chipSecondary: greystoneLeasing.status,
-    title: clientCopy.greystone.heading, description: clientCopy.greystone.paragraph,
+    title: clientCopy.greystone.heading, description: greystoneDescription,
     image: MULBERRY_MEDIA.residentialApartments,
     alt: 'A light-filled bedroom with a round mirror and a white dresser',
     details: [
       { label: 'Apartment Homes', value: greystoneLeasing.status },
-      { label: 'April Durham', value: greystoneLeasing.phone, href: `tel:${greystoneLeasing.tel}` },
+      { label: greystoneLeasing.name, value: greystoneLeasing.phone, href: `tel:${greystoneLeasing.tel}` },
     ],
-    ctaLabel: 'Learn more', ctaHref: 'https://www.greystoneatmulberrygrove.com/',
+    ctaLabel: 'Learn more', ctaHref: greystoneCommunity,
     secondaryCta: { label: 'Email', href: 'mailto:mail@greystoneproperties.net' },
   },
   {
     id: 'village-retail', anchorId: 'retail', chipPrimary: 'Retail', chipSecondary: 'Commercial Land Sale',
-    title: clientCopy.retail.heading, description: clientCopy.retail.paragraph,
+    title: clientCopy.retail.heading, description: woodruffDescription,
     image: MULBERRY_MEDIA.retailCarousel[0].src, alt: MULBERRY_MEDIA.retailCarousel[0].alt,
     carousel: MULBERRY_MEDIA.retailCarousel,
     details: [
@@ -171,14 +174,14 @@ export const CONTACT_DIRECTORY = [
     category: 'General Inquiries', company: 'Woodruff Real Estate Services, LLC',
     image: MULBERRY_MEDIA.retailFeature,
     alt: 'Dining and hospitality imagery from the original Mulberry Grove website',
-    summary: clientCopy.retail.paragraph, people: RETAIL_DATA.brokers,
+    summary: woodruffDescription, people: RETAIL_DATA.brokers,
     email: RETAIL_DATA.generalEmail, website: RETAIL_DATA.website, extraLink: undefined,
   },
   {
     category: 'Single Family Homes', company: 'Stone Martin Builders',
     image: MULBERRY_MEDIA.residentialSingleFamily,
     alt: 'A bedside table and lamp in a warmly decorated bedroom',
-    summary: clientCopy.stoneMartin.paragraph,
+    summary: stoneMartinDescription,
     people: [{ name: 'Stone Martin', role: 'Builder', email: undefined, phone: '706.801.4265', tel: '7068014265' }],
     email: 'mulberrygrove@stonemartinbuilders.com', website: 'https://www.stonemartinbuilders.com/',
     extraLink: { label: 'Learn more', href: stoneMartinCommunity },
@@ -186,10 +189,13 @@ export const CONTACT_DIRECTORY = [
   {
     category: 'Apartment Homes', company: 'Greystone Properties', image: MULBERRY_MEDIA.residentialApartments,
     alt: 'A light-filled bedroom with a round mirror and a white dresser',
-    summary: clientCopy.greystone.paragraph,
-    people: [{ name: 'April Durham', role: undefined, email: undefined, phone: greystoneLeasing.phone, tel: greystoneLeasing.tel }],
+    summary: greystoneDescription,
+    people: [
+      { name: 'April Durham', role: undefined, email: undefined, phone: '706.221.7175', tel: '7062217175' },
+      { name: greystoneLeasing.name, role: undefined, email: undefined, phone: greystoneLeasing.phone, tel: greystoneLeasing.tel },
+    ],
     email: 'mail@greystoneproperties.net', website: 'https://greystoneproperties.net',
-    extraLink: { label: 'Learn more', href: 'https://www.greystoneatmulberrygrove.com/' },
+    extraLink: { label: 'Learn more', href: greystoneCommunity },
   },
 ];
 

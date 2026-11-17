@@ -25,7 +25,12 @@ await page.waitForTimeout(1800);
 await page.screenshot({ path: 'artifacts/final-desktop.png' });
 
 const nav = page.getByRole('navigation', { name: 'Primary Navigation' });
-for (const label of ['Vision', 'Community', 'Location', 'Residential', 'Retail', 'Contact']) {
+const navigation = [
+  ['Vision', 'vision'], ['Residential', 'residential'], ['Community', 'community'],
+  ['Retail', 'retail'], ['Contact Us', 'contact'],
+];
+assert.deepEqual(await nav.getByRole('link').allTextContents(), navigation.map(([label]) => label));
+for (const [label, id] of navigation) {
   const link = nav.getByRole('link', { name: label, exact: true });
   assert(await link.isVisible(), `${label} missing on desktop`);
   const style = await link.evaluate((el) => ({ bg: getComputedStyle(el).backgroundColor, border: getComputedStyle(el).borderWidth }));
@@ -33,7 +38,7 @@ for (const label of ['Vision', 'Community', 'Location', 'Residential', 'Retail',
   assert.equal(style.border, '0px');
   await link.click();
   await page.waitForTimeout(1600);
-  const id = label.toLowerCase();
+  assert.equal(await link.getAttribute('aria-current'), 'location');
   const position = await page.locator(`#${id}`).evaluate((el) => el.getBoundingClientRect().top);
   const headerHeight = await page.locator('header').evaluate((el) => el.getBoundingClientRect().height);
   assert(Math.abs(position - headerHeight) < 12, `${label} anchor hidden or misaligned: ${position}`);
@@ -66,9 +71,11 @@ for (const section of ['stoneMartin', 'greystone']) {
 }
 for (const phrase of ['168 ac', 'nature preserve', 'golf', 'south metro', 'has been added for', 'your submission has been received']) assert(!text.includes(phrase), `Unsupported copy: ${phrase}`);
 for (const value of ['706.221.3632', '706.786.6700', '706.801.4265', '478-368-5350', 'Explore Available Homes', 'Now Leasing']) assert(text.includes(normalize(value)), `Client update missing: ${value}`);
-assert(!/\b\d+\s+homesites?\s+remaining\b|delivering\s+2023|706[.\s-]*221[.\s-]*7175/i.test(text));
+assert(!/\b\d+\s+homesites?\s+remaining\b|delivering\s+2023/i.test(text));
 const stoneMartin = 'https://www.stonemartinbuilders.com/find-my-home/harris-county/mulberry-grove';
+const greystone = 'https://greystoneproperties.net/mulberry-grove';
 assert.equal(await page.locator(`#residential a[href="${stoneMartin}"]`).count(), 1);
+assert.equal(await page.locator(`#residential a[href="${greystone}"]`).count(), 1);
 for (const scope of ['#residential', 'footer']) {
   assert.equal(await page.locator(`${scope} a[href="tel:4783685350"]`).textContent(), '478-368-5350');
 }
@@ -106,7 +113,10 @@ for (let index = 0; index < 4; index++) {
 await page.getByRole('tab', { name: 'Directory', exact: true }).click();
 assert.equal(await page.locator('#contact article').count(), 3);
 assert(await page.locator('#contact').getByText('April Durham', { exact: true }).isVisible());
+assert(await page.locator('#contact').getByText('Greystone Leasing Office', { exact: true }).isVisible());
+assert.equal((await page.locator('#contact a[href="tel:7062217175"]').textContent()).trim(), '706.221.7175');
 assert.equal(await page.locator(`#contact a[href="${stoneMartin}"]`).count(), 1);
+assert.equal(await page.locator(`#contact a[href="${greystone}"]`).count(), 1);
 assert.equal((await page.locator('#contact a[href="tel:4783685350"]').textContent()).trim(), '478-368-5350');
 await page.getByRole('tab', { name: 'Get Connected', exact: true }).click();
 assert.equal(await page.locator('#mg-email').getAttribute('type'), 'email');
@@ -157,11 +167,18 @@ await page.getByRole('button', { name: 'Open menu', exact: true }).click();
 await page.waitForTimeout(600);
 const mobileNav = page.getByRole('navigation', { name: 'Mobile Navigation', exact: true });
 assert.equal(await page.locator('#mobile-navigation').getByRole('link', { name: 'Privacy Policy', exact: true }).getAttribute('href'), '/privacy-policy/');
-assert.equal(await mobileNav.getByRole('link').count(), 6);
+assert.deepEqual(await mobileNav.getByRole('link').evaluateAll((links) => links.map((link) => [
+  link.querySelector('span').textContent, link.hash,
+])), navigation.map(([label, id]) => [label, `#${id}`]));
 await page.screenshot({ path: 'artifacts/final-mobile-menu.png' });
-await mobileNav.locator('a[href="#location"]').click();
-await page.waitForTimeout(1600);
-assert.equal(await page.getByRole('dialog', { name: 'Site Menu' }).count(), 0);
+for (const [, id] of navigation) {
+  await mobileNav.locator(`a[href="#${id}"]`).click();
+  await page.waitForTimeout(1600);
+  assert.equal(await page.getByRole('dialog', { name: 'Site Menu' }).count(), 0);
+  assert.equal(new URL(page.url()).hash, `#${id}`);
+  if (id !== 'contact') await page.getByRole('button', { name: 'Open menu', exact: true }).click();
+}
+await visit('#location');
 await page.screenshot({ path: 'artifacts/final-mobile-location.png' });
 
 assert.equal(errors.length, 0, JSON.stringify(errors));

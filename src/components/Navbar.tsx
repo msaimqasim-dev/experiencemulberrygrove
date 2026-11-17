@@ -29,8 +29,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, onOpenModal }) => {
       setScrolled(y > 40);
       let current = 'top';
       const threshold = (headerRef.current?.offsetHeight ?? 80) + 12;
+      let closestTop = -Infinity;
       for (const item of NAV_SECTIONS) {
-        if ((document.getElementById(item.id)?.getBoundingClientRect().top ?? Infinity) <= threshold) current = item.id;
+        const top = document.getElementById(item.id)?.getBoundingClientRect().top ?? Infinity;
+        if (top <= threshold && top > closestTop) {
+          closestTop = top;
+          current = item.id;
+        }
       }
       setActiveSection(current);
     };
