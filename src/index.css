@@ -1,0 +1,812 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Nyght Serif";
+  src: url("./assets/fonts/NyghtSerif-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nyght Serif";
+  src: url("./assets/fonts/NyghtSerif-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nyght Serif";
+  src: url("./assets/fonts/NyghtSerif-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Exact Harroway Typography Tokens */
+  --font-display: "Nyght Serif", "Times New Roman", Georgia, serif;
+  --font-body: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Sono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Exact Harroway Primary Brand Accent Ramp (#788994 mixed in sRGB) */
+  --accent-default: #788994;
+  --accent-10: #f2f3f4;
+  --accent-50: #dde2e4;   /* light-subtle / inverse-text */
+  --accent-100: #d0d6da;  /* light-base / body-background */
+  --accent-200: #c2cacf;  /* light-strong */
+  --accent-300: #a1acb4;  /* brand-accent--base */
+  --accent-400: #86959f;  /* hero stat tile */
+  --accent-500: #788994;  /* default */
+  --accent-600: #4e5960;
+  --accent-700: #3c454a;  /* dark-subtle */
+  --accent-800: #24292c;  /* dark-base / brand-strong / secondary-text */
+  --accent-900: #121516;  /* dark-strong / primary-text */
+  --accent-950: #0c0e0f;
+
+  /* Exact Harroway Secondary Brand Accent Ramp (#395849 Botanical Grove Green) */
+  --secondary-default: #395849;
+  --secondary-10: #ebeeed;
+  --secondary-50: #d7dedb;
+  --secondary-100: #c4cdc8; /* secondary-light-base */
+  --secondary-200: #9cac9f; /* secondary-light-strong */
+  --secondary-300: #748a80; /* secondary-subtle */
+  --secondary-400: #4d695b;
+  --secondary-500: #395849; /* secondary-base */
+  --secondary-600: #25392f;
+  --secondary-700: #1c2c25; /* secondary-strong */
+  --secondary-800: #111a16; /* secondary-dark-base */
+  --secondary-900: #090d0b; /* secondary-dark-strong */
+
+  /* Semantic Surface & Text Tokens */
+  --bg-body: var(--accent-100);
+  --bg-light-subtle: var(--accent-50);
+  --bg-light-base: var(--accent-100);
+  --bg-light-strong: var(--accent-200);
+  --bg-dark-base: var(--accent-800);
+  --bg-dark-strong: var(--accent-900);
+  --text-primary: var(--accent-900);
+  --text-secondary: var(--accent-800);
+  --text-inverse: var(--accent-50);
+
+  /* Geometry & Fluid Spacing Tokens */
+  --radius-default: 3px;
+  --radius-medium: 6px;
+  --radius-pill: 999rem;
+  --container-pad: clamp(0.875rem, 0.7rem + 0.6vw, 1.5rem);
+  --section-pad-md: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  --section-pad-lg: clamp(3.5rem, 2.2rem + 5.5vw, 6.5rem);
+  --nav-height: clamp(4.25rem, 3.8rem + 1.4vw, 5.25rem);
+  --action-height: clamp(2.5rem, 2.35rem + 0.65vw, 3.1rem);
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Lenis smooth scroll base */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
+  line-height: 1.55;
+  overflow-x: clip;
+}
+
+section[id], article[id] {
+  scroll-margin-top: var(--nav-height);
+}
+
+img, video {
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+}
+
+.site-nav-link {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 250ms ease;
+}
+
+.site-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 350ms var(--ease-editorial);
+}
+
+.site-nav-link:hover,
+.site-nav-link[aria-current="location"] {
+  opacity: 1;
+}
+
+.site-nav-link:hover::after,
+.site-nav-link[aria-current="location"]::after {
+  transform: scaleX(1);
+}
+
+.media-viewport {
+  background-color: var(--accent-300);
+  isolation: isolate;
+}
+
+.media-viewport img,
+.media-viewport video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+::selection {
+  background-color: var(--secondary-500);
+  color: var(--accent-50);
+}
+
+/* ============================================================
+   HARROWAY TYPOGRAPHY SYSTEM
+   ============================================================ */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-mono-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.72rem, 0.69rem + 0.12vw, 0.8125rem);
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.hw-heading-hero {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 2rem + 3.4vw, 5.25rem);
+  line-height: 0.98;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.hw-heading-typo {
+  font-family: var(--font-display);
+  font-size: clamp(2.65rem, 7vw, 8.75rem);
+  line-height: 0.96;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+}
+
+.hw-heading-cta {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 6rem);
+  line-height: 1.12;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.hw-heading-2xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.15rem, 1.8rem + 1.9vw, 4.15rem);
+  line-height: 1.15;
+  font-weight: 400;
+}
+
+.hw-heading-xl {
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 1.65rem + 1vw, 3rem);
+  line-height: 1.1;
+  font-weight: 400;
+}
+
+.hw-heading-lg {
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 1.4rem + 0.65vw, 2.2rem);
+  line-height: 1.12;
+  font-weight: 400;
+}
+
+.hw-heading-md {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1.3rem + 0.45vw, 1.9rem);
+  line-height: 1.14;
+  font-weight: 400;
+}
+
+/* ============================================================
+   HARROWAY DUAL-CHIP SPLIT LABELS
+   ============================================================ */
+.hw-label {
+  display: inline-flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  max-width: 100%;
+  border-radius: var(--radius-default);
+}
+
+.hw-label-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.42rem 0.72rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-default);
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 0.65rem + 0.1vw, 0.76rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.hw-label--light .hw-label-chip:first-child {
+  background-color: color-mix(in srgb, var(--accent-300) 55%, transparent);
+  color: var(--text-primary);
+}
+.hw-label--light .hw-label-chip:last-child:not(:first-child) {
+  background-color: color-mix(in srgb, var(--accent-300) 28%, transparent);
+  color: var(--text-primary);
+}
+
+.hw-label--dark .hw-label-chip:first-child {
+  background-color: rgba(221, 226, 228, 0.24);
+  color: var(--text-inverse);
+}
+.hw-label--dark .hw-label-chip:last-child:not(:first-child) {
+  background-color: rgba(221, 226, 228, 0.12);
+  color: var(--text-inverse);
+}
+
+.hw-label--grove .hw-label-chip:first-child {
+  background-color: rgba(57, 88, 73, 0.52);
+  color: var(--secondary-50);
+}
+.hw-label--grove .hw-label-chip:last-child:not(:first-child) {
+  background-color: rgba(57, 88, 73, 0.28);
+  color: var(--secondary-50);
+}
+
+/* ============================================================
+   HARROWAY SIGNATURE ROLLING BUTTONS
+   ============================================================ */
+.hw-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.15rem;
+  padding: 0.72rem 0.75rem 0.72rem 1.1rem;
+  border-radius: var(--radius-default);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.1;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  border: none;
+  transition: color 0.35s var(--ease-editorial), border-color 0.35s var(--ease-editorial);
+}
+
+.hw-btn--grove {
+  background-color: var(--secondary-500);
+  color: var(--text-inverse);
+}
+
+.hw-btn--slate {
+  background-color: var(--accent-300);
+  color: var(--text-primary);
+}
+
+.hw-btn--dark {
+  background-color: var(--accent-800);
+  color: var(--text-inverse);
+}
+
+.hw-btn--outline {
+  background-color: rgba(221, 226, 228, 0.08);
+  border: 1px solid rgba(221, 226, 228, 0.28);
+  color: var(--text-inverse);
+  backdrop-filter: blur(10px);
+}
+
+.hw-btn-bg {
+  position: absolute;
+  inset: 0;
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 0.42s var(--ease-editorial);
+  z-index: 1;
+}
+
+.hw-btn--grove .hw-btn-bg {
+  background-color: var(--secondary-700);
+}
+
+.hw-btn--slate .hw-btn-bg {
+  background-color: var(--secondary-500);
+}
+
+.hw-btn--dark .hw-btn-bg {
+  background-color: var(--secondary-500);
+}
+
+.hw-btn--outline .hw-btn-bg {
+  background-color: var(--secondary-500);
+}
+
+.hw-btn:hover .hw-btn-bg {
+  transform: scaleY(1);
+  transform-origin: top center;
+}
+
+.hw-btn--slate:hover {
+  color: var(--text-inverse);
+}
+
+.hw-btn-text-mask {
+  position: relative;
+  z-index: 2;
+  display: inline-grid;
+  overflow: hidden;
+  height: 1.15em;
+}
+
+.hw-btn-text-1,
+.hw-btn-text-2 {
+  grid-area: 1 / 1;
+  display: block;
+  transition: transform 0.42s var(--ease-editorial);
+  white-space: nowrap;
+}
+
+.hw-btn-text-2 {
+  transform: translateY(115%);
+}
+
+.hw-btn:hover .hw-btn-text-1 {
+  transform: translateY(-115%);
+}
+
+.hw-btn:hover .hw-btn-text-2 {
+  transform: translateY(0%);
+}
+
+.hw-btn-icon-wrap {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.14);
+  transition: background-color 0.35s var(--ease-editorial), transform 0.35s var(--ease-editorial);
+  overflow: hidden;
+}
+
+.hw-btn--slate .hw-btn-icon-wrap {
+  background-color: rgba(18, 21, 22, 0.1);
+}
+
+.hw-btn--slate:hover .hw-btn-icon-wrap {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+.hw-btn-icon {
+  transition: transform 0.42s var(--ease-editorial);
+}
+
+.hw-btn:hover .hw-btn-icon {
+  transform: translateX(3px);
+}
+
+/* ============================================================
+   HARROWAY NAVBAR PILLS & MEGA MENU LINKS
+   ============================================================ */
+.hw-nav-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: var(--action-height);
+  padding: 0.35rem 0.55rem 0.35rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background-color: rgba(57, 88, 73, 0.54);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(221, 226, 228, 0.12);
+  color: var(--text-inverse);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.1;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.35s var(--ease-editorial), background-color 0.35s var(--ease-editorial);
+}
+
+.hw-nav-pill-fill {
+  position: absolute;
+  inset: 0;
+  background-color: var(--secondary-700);
+  transform: translateY(102%);
+  transition: transform 0.4s var(--ease-editorial);
+  z-index: 1;
+}
+
+.hw-nav-pill:hover .hw-nav-pill-fill {
+  transform: translateY(0%);
+}
+
+.hw-nav-pill:hover {
+  border-color: rgba(221, 226, 228, 0.28);
+}
+
+.hw-nav-pill:hover .hw-btn-text-1 {
+  transform: translateY(-115%);
+}
+
+.hw-nav-pill:hover .hw-btn-text-2 {
+  transform: translateY(0%);
+}
+
+.hw-nav-pill-icon {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 999px;
+  background-color: rgba(221, 226, 228, 0.12);
+  transition: transform 0.38s var(--ease-editorial), background-color 0.38s var(--ease-editorial);
+}
+
+.hw-nav-pill:hover .hw-nav-pill-icon {
+  background-color: rgba(221, 226, 228, 0.22);
+  transform: translateX(2px);
+}
+
+/* Mega menu item dual-line hover */
+.hw-mega-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.72rem 0.2rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+}
+
+.hw-mega-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: rgba(18, 21, 22, 0.16);
+}
+
+.hw-mega-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: var(--secondary-500);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.42s var(--ease-editorial);
+}
+
+.hw-mega-link:hover::after {
+  transform: scaleX(1);
+}
+
+.hw-mega-link-arrow {
+  transition: transform 0.38s var(--ease-editorial);
+  opacity: 0.7;
+}
+
+.hw-mega-link:hover .hw-mega-link-arrow {
+  transform: translate(3px, -2px);
+  opacity: 1;
+}
+
+/* Brand logo slogan hover reveal (exact Harroway behavior) */
+.hw-logo-link .hw-brand-slogan {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s var(--ease-editorial), transform 0.35s var(--ease-editorial);
+}
+
+.hw-logo-link:hover .hw-brand-slogan {
+  opacity: 0.85;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   HARROWAY SHOWCASE & SERVICE CARD HOVERS
+   ============================================================ */
+.hw-showcase-panel {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.hw-showcase-panel-bg {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(18, 21, 22, 0.62);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  transform: translateY(12%);
+  transition: opacity 0.45s var(--ease-editorial), transform 0.45s var(--ease-editorial);
+  z-index: 1;
+}
+
+.hw-showcase-panel:hover .hw-showcase-panel-bg {
+  opacity: 1;
+  transform: translateY(0%);
+}
+
+.hw-showcase-panel:hover .hw-plus-spin {
+  transform: rotate(90deg);
+}
+
+.hw-plus-spin {
+  transition: transform 0.42s var(--ease-editorial);
+}
+
+/* Sticky drive-times grid cards (exact Harroway .service-grid-link hover) */
+.hw-service-card {
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.4s var(--ease-editorial);
+}
+
+.hw-service-card-media {
+  position: relative;
+  overflow: hidden;
+  height: clamp(8.5rem, 11.5vw, 13.5rem);
+  transition: height 0.5s var(--ease-editorial);
+}
+
+.hw-service-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 0.7s var(--ease-editorial);
+}
+
+.hw-service-card:hover .hw-service-card-img {
+  transform: scale(1.09);
+}
+
+.hw-service-card:hover {
+  background-color: color-mix(in srgb, var(--accent-200) 75%, var(--accent-300));
+}
+
+/* Footer/Directory contact sweep links */
+.hw-contact-sweep {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.35s var(--ease-editorial);
+}
+
+.hw-contact-sweep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--secondary-500);
+  transform: translateY(101%);
+  transition: transform 0.4s var(--ease-editorial);
+  z-index: 0;
+}
+
+.hw-contact-sweep:hover::before {
+  transform: translateY(0%);
+}
+
+/* Tab link sweep */
+.hw-tab-btn {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.35s var(--ease-editorial), background-color 0.35s var(--ease-editorial);
+}
+
+.hw-tab-btn-bg {
+  position: absolute;
+  inset: 0;
+  background-color: var(--accent-200);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.38s var(--ease-editorial);
+  z-index: 0;
+}
+
+.hw-tab-btn:not([data-active="true"]):hover .hw-tab-btn-bg {
+  transform: scaleY(1);
+}
+
+/* ============================================================
+   HARROWAY FLOATING-LABEL FORM FIELDS
+   ============================================================ */
+.hw-field-wrap {
+  position: relative;
+  padding-top: 1.35rem;
+}
+
+.hw-field-label {
+  position: absolute;
+  left: 0;
+  top: 1.75rem;
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 1rem + 0.3vw, 1.3rem);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--accent-800);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform 0.32s var(--ease-editorial), color 0.32s var(--ease-editorial), opacity 0.32s var(--ease-editorial);
+}
+
+.hw-field-wrap[data-floated="true"] .hw-field-label,
+.hw-field-wrap:focus-within .hw-field-label {
+  transform: translateY(-1.3rem) scale(0.72);
+  color: var(--secondary-600);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.hw-field-input {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(36, 41, 44, 0.32);
+  border-radius: 0;
+  padding: 0.55rem 0 0.65rem;
+  font-family: var(--font-body);
+  font-size: clamp(1.02rem, 0.98rem + 0.2vw, 1.18rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.hw-field-input:focus {
+  border-bottom-color: var(--secondary-500);
+}
+
+/* Smooth accordion grid transition */
+.hw-accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s var(--ease-editorial);
+}
+
+.hw-accordion-body[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.hw-accordion-inner {
+  overflow: hidden;
+}
+
+/* Slow ambient radial rotation (Harroway data-radial-text-marquee-init) */
+@keyframes hw-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hw-spin-slow {
+  animation: hw-spin-slow 24s linear infinite;
+}
+
+@keyframes hw-scroll-pulse {
+  0%, 100% {
+    transform: scaleX(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleX(0.68);
+    opacity: 1;
+  }
+}
+
+.hw-scroll-line {
+  transform-origin: left center;
+  animation: hw-scroll-pulse 3.2s ease-in-out infinite;
+}
+
+/* Line mask animation utility */
+.hw-line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+/* Invert pure-white SVG logo to crisp dark ink when needed */
+.hw-logo-dark {
+  filter: brightness(0) saturate(100%) invert(6%) sepia(6%) saturate(900%) hue-rotate(155deg) brightness(95%) contrast(94%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hw-spin-slow,
+  .hw-scroll-line {
+    animation: none;
+  }
+}
